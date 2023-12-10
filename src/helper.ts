@@ -16,6 +16,9 @@ export const getStartOfPreviousMonth = (): String => {
   return dayjs(new Date(year, month - 1, 1)).format('YYYY-MM-DD').toString();
 };
 
+export const getDateFormat = (dateTime: string | Date): String => dayjs(dateTime).format('YYYY-MM-DD').toString();
+export const getEndDateOfMonth = (dateTime: string | Date): String => dayjs(dateTime).endOf('month').format('YYYY-MM-DD').toString();
+
 export const getEndOfCurrentMonth = (): String => {
   const today = new Date();
   const year = today.getFullYear();
@@ -24,11 +27,28 @@ export const getEndOfCurrentMonth = (): String => {
   return dayjs(new Date(year, month + 1, 0)).format('YYYY-MM-DD').toString();
 };
 
+
 // Function to check if two dates are the same day
 export const isSameDay = (date1: Date, date2: Date): boolean => {
-  return (
-    date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate()
-  );
+  return dayjs(date1).isSame(date2, 'day');
 };
+
+export const findMatchDate = (fixturesData: any[], selectedDate: Date): any[] => {
+  const selectedDay = dayjs(selectedDate);
+  const data = [];
+
+  for (const item of fixturesData) {
+    const fixtureDay = dayjs(item.fixture.matchDate);
+    if (selectedDay.isSame(fixtureDay, 'day')) {
+      data.push(item);
+    }
+  }
+  return data;
+};
+
+export const dateDisplay =(inputDate: Date | string) => dayjs(inputDate).format('DD MMM YYYY').toString();
+
+export const nextYearEnd = dayjs().add(1, 'year').endOf('year').toDate();
+
+export const prevYearStart = dayjs().subtract(1, 'year').startOf('year').toDate();
+
